@@ -10,6 +10,17 @@ vectorizer = CountVectorizer()
 genre_vectors = vectorizer.fit_transform(movies['genres'])
 similarity_matrix = cosine_similarity(genre_vectors)
 
+def recommendation(movie_title, movies, similarity_matrix, num_recommendations = 4):
+    try:
+        movie_index = data[data['title'].str.contains(movie_title, case = False, na = False)].index[0]
+    except IndexError:
+        return ["Movie not found in the dataset"]
+    
+    similarity_scores = list(enumerate(similarity_matrix[movie_index]))
+    similar_movies = sorted(similarity_scores, key = lambda x: x[1], reverse = True)
+    top_indices = [i[0] for i in similar_movies[1:num_recommendations + 1]]
+    return data.iloc[top_indices]['title'].tolist()
+
 st.title('Movie Recommendation Algorithm')
 movie_title = st.text_input("What is a movie that you enjoyed?")
 
@@ -21,15 +32,3 @@ if movie_title.strip():
         st.write("RECOMMENDATIONS")
         for idx, movie in enumerate(recommendations, start = 1):
             st.write(f"{idx}, {movie}")
-            
-
-def recommendation(movie_title, movies, similarity_matrix, num_recommendations = 4):
-    try:
-        movie_index = data[data['title'].str.contains(movie_title, case = False, na = False)].index[0]
-    except IndexError:
-        return ["Movie not found in the dataset"]
-    
-    similarity_scores = list(enumerate(similarity_matrix[movie_index]))
-    similar_movies = sorted(similarity_scores, key = lambda x: x[1], reverse = True)
-    top_indices = [i[0] for i in similar_movies[1:num_recommendations + 1]]
-    return data.iloc[top_indices]['title'].tolist()
