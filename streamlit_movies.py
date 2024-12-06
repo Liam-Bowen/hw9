@@ -5,7 +5,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 file_path = '/Users/liambowen/Desktop/principles_of_programming/hw9_Liam_Bowen/movies.csv'
-movies = pd.read_csv(file_path)
+movies = pd.read_csv(file_path, nrows=1000)
 vectorizer = CountVectorizer()
 genre_vectors = vectorizer.fit_transform(movies['genres'])
 similarity_matrix = cosine_similarity(genre_vectors)
