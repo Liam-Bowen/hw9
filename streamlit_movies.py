@@ -7,7 +7,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 @st.cache_data
 def load_data():
     file_path = 'movies.csv'
-    movies = pd.read_csv(file_path, nrows=20000)
+    movies = pd.read_csv(file_path, nrows=1000)
     vectorizer = CountVectorizer()
     genre_vectors = vectorizer.fit_transform(movies['genres'])
     similarity_matrix = cosine_similarity(genre_vectors)
